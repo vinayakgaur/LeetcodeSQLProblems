@@ -1,0 +1,20 @@
+# This table contains the sales of "apples" and "oranges" sold each day.
+# Write an SQL query to report the difference between number of apples and oranges sold each day.
+# Return the result table ordered by sale_date in format ('YYYY-MM-DD').
+
+
+with cte as 
+(
+select 
+    sale_date,
+    sold_num,
+    lead(sold_num) over (partition by sale_date order by fruit) as rnk
+from 
+    sales
+)
+select 
+    sale_date,
+    sum(sold_num - rnk) as diff
+from 
+   cte 
+group by 1

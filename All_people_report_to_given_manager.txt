@@ -1,0 +1,21 @@
+
+# Write an SQL query to find employee_id of all employees that directly or indirectly report their work to the head of the company.
+
+# The indirect relation between managers will not exceed 3 managers as the company is small.
+
+# Return result table in any order without duplicates.
+
+with cte as(
+select 
+    e1.employee_id as emp,
+    e2.employee_id as mng
+from 
+    employees as e1
+ join employees as e2 on e1.manager_id = e2.employee_id
+    and e2.manager_id in (select distinct employee_id from employees where manager_id = 1)
+)
+select 
+emp
+from cte 
+join employees e4 on cte.emp = e4.employee_id
+where emp != e4.manager_id
