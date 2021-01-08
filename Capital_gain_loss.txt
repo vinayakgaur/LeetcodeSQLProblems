@@ -1,0 +1,14 @@
+with cte as(
+select 
+    stock_name,
+    sum(case when operation = 'Buy'then price end) as buying,
+    sum(case when operation = 'Sell' then price end) as selling
+from 
+    stocks
+group by 1
+)
+select 
+    stock_name,
+    sum(selling - buying) as capital_gain_loss
+from cte
+    group by 1
